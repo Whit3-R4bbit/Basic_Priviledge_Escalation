@@ -1,0 +1,88 @@
+Linux Priv Esc Basics
+
+	Enumeration:
+
+		hostname -> return target hostname
+		uname -a -> prints kernal details
+		/proc/version -> prints kernal and compiler info
+		/etc/issue -> prints sys info
+		ps command -> show running processes
+			ps -A -> show all running procs
+			ps axjf -> view process tree
+			ps aux -> show procs for all users, user that launched proc, and proc not attached to terminal
+		env -> show environment variables, PATH may have comp or script lang
+		sudo -l -> shows commands that can be run with sudo
+		id -> shows priv level and group memberships
+		/etc/passwd -> discover users, grep home for real users
+		history -> can give info of previous commands
+		ifconfig -> prints network interfaces
+		ip route -> see what network routes exist
+		netstat -> shows ports
+			-a -> show all listening ports and established connections
+			-at/-au -> lists TCP and UDP ports
+			-l -> lists ports in listening mode
+			-s -> list network usage stats by protocol
+			-tp -> list connections with service name and PID info
+			-i -> show interface stats
+			-ano -> display all sockets, dont resolve names, display timers
+		find -> search files in target system
+			/ -writable -type d 2>/dev/null -> find world writable folders
+			/ -perm -222 -type d 2>/dev/null -> find world writable folders
+			/ -perm -o w -type d 2>/dev/null -> find world writable folders
+			wham -> find world exec folders
+			/ -name python* -> finds supported languages
+			/ -perm -u=s -type f 2>/dev/null -> find files with SUID bit set
+		getcap -r /
+
+	Automated Enum Tools:
+		LinPEAS
+		LinEnum
+		Linux Exploit Suggester (LES)
+		Linux Smart Enumeration
+		Linux Priv Checker
+
+	Capabilities:
+		getcap -> list enabled capabilities
+			-r / 2>dev/null -> can show files with admin level capabilities without SUID bit
+
+	Cron Jobs:
+		/etc/crontab -> show system cronjobs
+		Modify accessible scripts to create reverse shells
+
+
+
+
+Windows Priv Esc:
+	
+	Enumeration: 
+		whoami /priv -> current user priv
+		net users -> list users
+		net user username -> user details
+		qwinsta -> other users logged in
+		net localgroup -> defined user groups
+		net localgroup groupname -> list group memberships
+		systeminfo -> return sys info
+		systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+		hostname -> get hosts machines name
+		findstr -> find strings in files
+		findstr /si password *.txt -> search txt files for passwords
+		wmic qfe get Caption,Description,HotFixID,InstalledOn -> list updates on target system
+		netstat -ano -> view active ports
+		schtasks -> cronjobs
+			/query /fo LIST /v 
+		driverquery -> list drivers
+
+
+# In reverse shell
+$ python -c 'import pty; pty.spawn("/bin/bash")'
+Ctrl-Z
+
+# In Local terminal
+$ stty raw -echo
+$ fg
+
+# In reverse shell
+$ reset
+$ export SHELL=bash
+$ export TERM=xterm-256color
+$ stty rows <num> columns <cols>
